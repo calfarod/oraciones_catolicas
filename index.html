@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oraciones Católicas</title>
+  
+  <!-- Favicon usando la imagen logo35.png -->
+  <link rel="icon" type="image/png" href="img/logo35.png">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0b192c',
+              gold: '#f59e0b',
+              goldHover: '#d97706'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Transiciones suaves */
+    * {
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .prayer-text {
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+    /* Estilo de barra de desplazamiento personalizada */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.5);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-[#0b192c] text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Header Fijo -->
+  <header class="sticky top-0 z-50 bg-white/95 dark:bg-[#0b192c]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <img src="img/logo500.png" alt="Logo Oraciones" class="w-10 h-10 object-contain rounded-lg shadow-sm">
+        <div>
+          <h1 class="text-lg font-bold leading-tight text-slate-900 dark:text-white">Oraciones Católicas</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Devocionario Mobile</p>
+        </div>
+      </div>
+
+      <!-- Acciones de Cabecera: Modo Oscuro y Controles de Fuente -->
+      <div class="flex items-center space-x-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl">
+        <button id="btn-font-down" title="Reducir letra" class="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 active:scale-95 transition">
+          <i data-lucide="minus" class="w-4 h-4"></i>
+        </button>
+        <span id="font-size-indicator" class="text-xs font-semibold px-1 text-slate-500 dark:text-slate-400">100%</span>
+        <button id="btn-font-up" title="Aumentar letra" class="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 active:scale-95 transition">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+        </button>
+        <div class="w-px h-4 bg-slate-300 dark:bg-slate-700 mx-0.5"></div>
+        <button id="btn-theme" title="Cambiar tema" class="p-1.5 rounded-lg text-amber-500 hover:bg-white dark:hover:bg-slate-700 active:scale-95 transition">
+          <i data-lucide="sun" id="theme-icon" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Buscador y Filtros -->
+    <div class="max-w-md mx-auto px-4 pb-3 space-y-2">
+      <div class="relative">
+        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Buscar oración..." 
+          class="w-full pl-9 pr-8 py-2 bg-slate-100 dark:bg-slate-800/90 border-0 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none text-slate-800 dark:text-slate-100 placeholder-slate-400"
+        >
+        <button id="clear-search" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Chips de Categoría -->
+      <div class="flex space-x-2 overflow-x-auto pb-1 text-xs no-scrollbar">
+        <button data-cat="todas" class="cat-btn bg-amber-500 text-white px-3 py-1.5 rounded-full font-medium whitespace-nowrap shadow-xs">Todas</button>
+        <button data-cat="basicas" class="cat-btn bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-full font-medium whitespace-nowrap">Básicas</button>
+        <button data-cat="marianas" class="cat-btn bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-full font-medium whitespace-nowrap">Marianas</button>
+        <button data-cat="credos" class="cat-btn bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-full font-medium whitespace-nowrap">Credos</button>
+        <button data-cat="diarias" class="cat-btn bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-full font-medium whitespace-nowrap">Diarias / Otros</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 max-w-md mx-auto w-full px-4 py-4 space-y-3" id="prayers-container">
+    <!-- Las oraciones se generarán dinámicamente -->
+  </main>
+
+  <!-- Mensaje de Búsqueda Vacía -->
+  <div id="no-results" class="hidden flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400">
+    <i data-lucide="book-open-check" class="w-12 h-12 mb-2 opacity-50"></i>
+    <p class="text-sm">No se encontraron oraciones que coincidan con tu búsqueda.</p>
+  </div>
+
+  <!-- Pie de página -->
+  <footer class="text-center py-6 text-xs text-slate-400 border-t border-slate-200 dark:border-slate-800/50 mt-6">
+    <p>Devocionario Católico Mobile</p>
+    <p class="mt-1 opacity-75">"Amanece la fe en el corazón"</p>
+  </footer>
+
+  <script>
+    // Colección de oraciones basada en el documento cargado
+    const prayers = [
+      {
+        id: 'padre-nuestro',
+        category: 'basicas',
+        title: 'El Padre Nuestro',
+        content: `Padre nuestro, que estás en el cielo,
+santificado sea tu Nombre;
+venga a nosotros tu reino;
+hágase tu voluntad, en la tierra como en el cielo.
+
+Danos hoy nuestro pan de cada día;
+perdona nuestras ofensas,
+como también nosotros perdonamos a los que nos ofenden;
+no nos dejes caer en la tentación, y líbranos del mal. Amén.`
+      },
+      {
+        id: 'ave-maria',
+        category: 'marianas',
+        title: 'El Ave María',
+        content: `Dios te salve, María, llena eres de gracia;
+el Señor es contigo;
+Bendita tú eres entre todas las mujeres,
+y bendito es el fruto de tu vientre, Jesús.
+
+Santa María, Madre de Dios,
+ruega por nosotros, pecadores,
+ahora y en la hora de nuestra muerte. Amén.`
+      },
+      {
+        id: 'la-salve',
+        category: 'marianas',
+        title: 'La Salve',
+        content: `Dios te salve, Reina y Madre de misericordia,
+vida y dulzura y esperanza nuestra: Dios te salve.
+A ti llamamos los desterrados hijos de Eva;
+a ti suspiramos, gimiendo y llorando en este valle de lágrimas.
+
+Ea, pues, Señora abogada nuestra,
+vuelve a nosotros esos tus ojos misericordiosos y,
+después de este destierro, muéstranos a Jesús, fruto bendito de tu vientre.
+
+¡Oh clementísima! ¡Oh piadosa! ¡Oh dulce Virgen María!
+Ruega por nosotros santa Madre de Dios,
+para que seamos dignos de alcanzar las promesas de nuestro Señor Jesucristo. Amén.`
+      },
+      {
+        id: 'credo-nicea',
+        category: 'credos',
+        title: 'Credo de Nicea',
+        content: `Creo en un sólo Dios, Padre Todopoderoso,
+Creador del cielo y de la tierra, de todo lo visible y lo invisible.
+
+Creo en un sólo Señor, Jesucristo,
+Hijo único de Dios nacido del Padre antes de todos los siglos:
+Dios de Dios, Luz de Luz, Dios verdadero de Dios verdadero,
+engendrado, no creado, de la misma naturaleza del Padre,
+por quien todo fue hecho; que por nosotros, los hombres,
+y por nuestra salvación bajo del cielo,
+y por obra del Espíritu Santo se encarnó de María, la Virgen, y se hizo hombre;
+y por nuestra causa fue crucificado en tiempos de Poncio Pilato;
+padeció y fue sepultado, y resucitó al tercer día, según las Escrituras,
+y subió al cielo, y está sentado a la derecha del Padre;
+y de nuevo vendrá con gloria para juzgar a vivos y muertos,
+y su reino no tendrá fin.
+
+Creo en el Espíritu Santo, Señor y dador de vida,
+que procede del Padre y del Hijo,
+que con el Padre y el Hijo recibe una misma adoración y gloria,
+y que habló por los profetas.
+
+Creo en la Iglesia, que es una, santa, católica y apostólica.
+Confieso que hay un sólo Bautismo para el perdón de los pecados.
+Espero la resurrección de los muertos y la vida del mundo futuro. Amén.`
+      },
+      {
+        id: 'credo-apostoles',
+        category: 'credos',
+        title: 'Credo de los Apóstoles',
+        content: `Creo en Dios, Padre todopoderoso,
+Creador del cielo y de la tierra.
+
+Creo en Jesucristo, su único Hijo, nuestro Señor,
+que fue concebido por obra y gracia del Espíritu Santo,
+nació de Santa María Virgen,
+padeció bajo el poder de Poncio Pilato,
+fue crucificado, muerto y sepultado,
+descendió a los infiernos,
+al tercer día resucitó de entre los muertos,
+subió a los cielos y está sentado a la derecha de Dios, Padre todopoderoso.
+Desde allí ha de venir a juzgar a los vivos y a los muertos.
+
+Creo en el Espíritu Santo, la santa Iglesia católica,
+la Comunión de los Santos, el perdón de los pecados,
+la resurrección de la carne y la vida eterna. Amén.`
+      },
+      {
+        id: 'regina-coeli',
+        category: 'marianas',
+        title: 'Regina Coeli',
+        content: `Alégrate, reina del cielo, aleluya.
+Porque el que mereciste llevar en tu seno; aleluya.
+Ha resucitado, según predijo; aleluya.
+Ruega por nosotros a Dios; aleluya.
+Gózate y alégrate, Virgen María; aleluya.
+Porque ha resucitado verdaderamente el Señor; aleluya.
+
+Oh Dios, que por la resurrección de tu Hijo,
+nuestro Señor Jesucristo,
+te has dignado dar la alegría al mundo,
+concédenos que por su Madre,
+la Virgen María, alcancemos el goce de la vida eterna.
+Por el mismo Cristo Nuestro Señor. Amén.`
+      },
+      {
+        id: 'yo-confieso',
+        category: 'basicas',
+        title: 'Yo Confieso',
+        content: `Yo confieso ante Dios Todopoderoso,
+y ante vosotros hermanos
+que he pecado mucho de pensamiento,
+palabra, obra y omisión.
+
+Por mi culpa, por mi culpa, por mi gran culpa.
+
+Por eso ruego a Santa María siempre Virgen,
+a los ángeles, a los santos y a vosotros hermanos,
+que intercedáis por mí ante Dios, Nuestro Señor. Amén.`
+      },
+      {
+        id: 'acto-contricion',
+        category: 'basicas',
+        title: 'Acto de Contrición',
+        content: `Señor mío, Jesucristo, Dios y hombre verdadero,
+Creador, Padre y Redentor mío;
+por ser Vos quien sois, Bondad infinita,
+y porque os amo sobre todas las cosas,
+me pesa de todo corazón de haberos ofendido;
+también me pesa porque podéis castigarme con las penas del infierno.
+
+Ayudado de vuestra divina gracia,
+propongo firmemente nunca más pecar,
+confesarme, y cumplir la penitencia que me fuere impuesta. Amén.`
+      },
+      {
+        id: 'magnificat',
+        category: 'marianas',
+        title: 'Oración del Magníficat',
+        content: `Proclama mi alma la grandeza del Señor,
+y se alegra mi espíritu en Dios, mi Salvador;
+porque ha mirado la humillación de su esclava.
+
+Desde ahora me felicitarán todas las generaciones,
+por el Poderoso ha hecho obras grandes en mí:
+su nombre es santo, y su misericordia
+llega a sus fieles de generación en generación.
+
+Él hace proezas con su brazo: dispersa a los soberbios de corazón,
+derriba del trono a los poderosos y enaltece a los humildes,
+a los hambrientos los colma de bienes y a los ricos los despide vacíos.
+
+Auxilia a Israel, su siervo, acordándose de la misericordia
+como lo había prometido a nuestros padres
+en favor de Abraham y su descendencia por siempre. Amén.`
+      },
+      {
+        id: 'senor-misericordia',
+        category: 'diarias',
+        title: 'Oración al Señor de la Misericordia',
+        content: `Oh Señor mi dulce amigo
+cuatro cosas hoy te pido con mucha necesidad.
+
+Paciencia para sufrir, fuerza para trabajar
+Valor para resistir las penas
+que han de venir y me han de mortificar.
+
+Temperamento sereno para poder resolver
+las cosas con santa calma.
+Y así tener en el alma
+perfecta tranquilidad.
+
+Esto tengo que pedirte
+oh mi Jesús adorado
+en este día consagrado
+para adorarte y servirte por siempre. Amén.`
+      },
+      {
+        id: 'angelus',
+        category: 'diarias',
+        title: 'Oración del Ángelus',
+        content: `V. El Ángel del Señor anunció a María.
+R. Y concibió por obra del Espíritu Santo.
+
+(Rezamos un Ave María)
+Dios te salve, María, llena eres de gracia; el Señor es contigo; Bendita tú eres entre todas las mujeres, y bendito es el fruto de tu vientre, Jesús. Santa María, Madre de Dios, ruega por nosotros, pecadores, ahora y en la hora de nuestra muerte. Amén.
+
+V. He aquí la esclava del Señor.
+R. Hágase en mí según tu palabra.
+
+(Rezamos un Ave María)
+
+V. Y el Verbo se hizo carne.
+R. Y habitó entre nosotros.
+
+(Rezamos un Ave María)
+
+V. Ruega por nosotros, santa Madre de Dios.
+R. Para que seamos dignos de alcanzar las promesas de Cristo.
+
+Oremos:
+Derrama, Señor, tu gracia sobre nosotros, que, por el anuncio del Ángel, hemos conocido la encarnación de tu Hijo, para que lleguemos, por su pasión y su cruz, a la gloria de la resurrección. Por Jesucristo, nuestro Señor. Amén.`
+      },
+      {
+        id: 'oracion-manana',
+        category: 'diarias',
+        title: 'Oración de la Mañana',
+        content: `Señor, en el silencio de este día que nace,
+vengo a pedirte paz, sabiduría y fuerza.
+
+Hoy quiero mirar al mundo con ojos llenos de amor.
+Ser paciente, comprensivo, humilde, suave y bueno.
+
+Ver a tus hijos detrás de las apariencias,
+como los ves tú mismo,
+para así poder apreciar la bondad de cada uno.
+
+Cierra mis oídos a toda murmuración.
+Guarda mi lengua de toda maledicencia.
+Que sólo los pensamientos que bendigan permanezcan en mí. Amén.`
+      }
+    ];
+
+    // Estado global de la app
+    let currentCategory = 'todas';
+    let searchQuery = '';
+    let fontScale = 100; // Porcentaje
+    let activePrayerId = null;
+
+    // Elementos DOM
+    const prayersContainer = document.getElementById('prayers-container');
+    const searchInput = document.getElementById('search-input');
+    const clearSearchBtn = document.getElementById('clear-search');
+    const noResults = document.getElementById('no-results');
+    const categoryButtons = document.querySelectorAll('.cat-btn');
+    const btnFontUp = document.getElementById('btn-font-up');
+    const btnFontDown = document.getElementById('btn-font-down');
+    const fontIndicator = document.getElementById('font-size-indicator');
+    const btnTheme = document.getElementById('btn-theme');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Inicialización del tema
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+
+    // Renderizar lista de oraciones
+    function renderPrayers() {
+      prayersContainer.innerHTML = '';
+      
+      const filtered = prayers.filter(prayer => {
+        const matchesCategory = currentCategory === 'todas' || prayer.category === currentCategory;
+        const matchesSearch = prayer.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                              prayer.content.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+      }
+
+      filtered.forEach(prayer => {
+        const isOpen = activePrayerId === prayer.id;
+        const card = document.createElement('article');
+        card.className = `bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700/60 overflow-hidden shadow-xs transition-all duration-300`;
+        
+        card.innerHTML = `
+          <button 
+            onclick="togglePrayer('${prayer.id}')"
+            class="w-full text-left p-4 flex items-center justify-between focus:outline-none select-none hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+          >
+            <div class="flex items-center space-x-3">
+              <div class="w-2 h-2 rounded-full ${isOpen ? 'bg-amber-500 ring-4 ring-amber-500/20' : 'bg-slate-300 dark:bg-slate-600'}"></div>
+              <h2 class="font-semibold text-slate-800 dark:text-slate-100 text-base">${prayer.title}</h2>
+            </div>
+            <i data-lucide="${isOpen ? 'chevron-up' : 'chevron-down'}" class="w-5 h-5 text-slate-400"></i>
+          </button>
+          
+          <div class="${isOpen ? 'block' : 'hidden'} px-5 pb-5 pt-2 border-t border-slate-100 dark:border-slate-700/40">
+            <div class="prayer-text text-slate-600 dark:text-slate-300 font-serif" style="font-size: ${fontScale}%">
+              ${escapeHtml(prayer.content)}
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/30 flex justify-end">
+              <button 
+                onclick="copyPrayerContent('${prayer.id}')" 
+                class="inline-flex items-center space-x-1.5 text-xs text-amber-600 dark:text-amber-400 font-medium hover:underline focus:outline-none"
+              >
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>Copiar oración</span>
+              </button>
+            </div>
+          </div>
+        `;
+
+        prayersContainer.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    // Toggle de desplegable
+    window.togglePrayer = function(id) {
+      activePrayerId = activePrayerId === id ? null : id;
+      renderPrayers();
+    }
+
+    // Copiar contenido
+    window.copyPrayerContent = function(id) {
+      const prayer = prayers.find(p => p.id === id);
+      if (prayer) {
+        navigator.clipboard.writeText(`${prayer.title}\n\n${prayer.content}`);
+        alert('Oración copiada al portapapeles');
+      }
+    }
+
+    // Escape de HTML para seguridad
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[m];
+      });
+    }
+
+    // Eventos de Categoría
+    categoryButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryButtons.forEach(b => {
+          b.classList.remove('bg-amber-500', 'text-white', 'shadow-xs');
+          b.classList.add('bg-slate-200', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+        });
+
+        btn.classList.remove('bg-slate-200', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+        btn.classList.add('bg-amber-500', 'text-white', 'shadow-xs');
+
+        currentCategory = btn.getAttribute('data-cat');
+        renderPrayers();
+      });
+    });
+
+    // Búsqueda
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      if (searchQuery.trim() !== '') {
+        clearSearchBtn.classList.remove('hidden');
+      } else {
+        clearSearchBtn.classList.add('hidden');
+      }
+      renderPrayers();
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      searchQuery = '';
+      clearSearchBtn.classList.add('hidden');
+      renderPrayers();
+    });
+
+    // Control de Tamaño de Letra
+    btnFontUp.addEventListener('click', () => {
+      if (fontScale < 150) {
+        fontScale += 10;
+        fontIndicator.textContent = `${fontScale}%`;
+        renderPrayers();
+      }
+    });
+
+    btnFontDown.addEventListener('click', () => {
+      if (fontScale > 80) {
+        fontScale -= 10;
+        fontIndicator.textContent = `${fontScale}%`;
+        renderPrayers();
+      }
+    });
+
+    // Control de Tema (Oscuro/Claro)
+    btnTheme.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+      lucide.createIcons();
+    });
+
+    // Render Inicial
+    renderPrayers();
+  </script>
+</body>
+</html>
