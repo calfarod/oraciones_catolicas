@@ -527,16 +527,16 @@ Que sólo los pensamientos que bendigan permanecican en mí. Amén.`
       let resultHTML = '';
 
       parts.forEach((part, index) => {
-        resultHTML += escapeHtml(part);
+        resultHTML += escapeHtml(part.trim());
 
         // Inyectar la grilla interactiva en cada una de las 5 decenas
         if (index < parts.length - 1) {
           resultHTML += `
-          <div class="my-4 p-3 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-700/50 select-none">
-            <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider text-center">
-              Cuentas de Avemaría (Misterio ${index + 1})
+          <div class="my-1 py-1 px-1 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-700/50 select-none">
+            <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wider text-center">
+              Cuentas Avemaría Misterio ${index + 1}/
             </div>
-            <div class="grid grid-cols-5 gap-3 max-w-[240px] mx-auto py-1">
+            <div class="grid grid-cols-5 gap-2 max-w-[220px] mx-auto py-0.5">
           `;
 
           for (let i = 1; i <= 10; i++) {
@@ -544,7 +544,7 @@ Que sólo los pensamientos que bendigan permanecican en mí. Amén.`
               <button 
                 type="button"
                 onclick="toggleBead(this)" 
-                class="w-9 h-9 rounded-full border-2 border-amber-500/80 text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center justify-center transition-all transform active:scale-90 shadow-xs hover:border-amber-500"
+                class="w-8 h-8 rounded-full border-2 border-amber-500/80 text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center justify-center transition-all transform active:scale-90 shadow-xs hover:border-amber-500"
                 title="Cuenta ${i}"
               >
                 ${i}
