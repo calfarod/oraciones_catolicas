@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,7 +89,7 @@
 
     <!-- Buscador y Filtros -->
     <div class="max-w-md mx-auto px-4 pb-3 space-y-2">
-      <div class="relative">
+      <!-- <div class="relative">
         <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
         <input 
           type="text" 
@@ -100,7 +100,7 @@
         <button id="clear-search" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
-      </div>
+      </div> -->
 
       <!-- Chips de Categoría -->
       <div class="flex space-x-2 overflow-x-auto pb-1 text-xs no-scrollbar">
@@ -534,7 +534,7 @@ Que sólo los pensamientos que bendigan permanecican en mí. Amén.`
           resultHTML += `
           <div class="my-1 py-1 px-1 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-700/50 select-none">
             <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wider text-center">
-              Cuentas Avemaría Misterio ${index + 1}/
+              Cuentas Avemaría Misterio ${index + 1}/+
             </div>
             <div class="grid grid-cols-5 gap-2 max-w-[220px] mx-auto py-0.5">
           `;
@@ -677,23 +677,23 @@ Que sólo los pensamientos que bendigan permanecican en mí. Amén.`
       });
     });
 
-    // Búsqueda
-    searchInput.addEventListener('input', (e) => {
-      searchQuery = e.target.value;
-      if (searchQuery.trim() !== '') {
-        clearSearchBtn.classList.remove('hidden');
-      } else {
-        clearSearchBtn.classList.add('hidden');
-      }
-      renderPrayers();
-    });
+    // // Búsqueda
+    // searchInput.addEventListener('input', (e) => {
+    //   searchQuery = e.target.value;
+    //   if (searchQuery.trim() !== '') {
+    //     clearSearchBtn.classList.remove('hidden');
+    //   } else {
+    //     clearSearchBtn.classList.add('hidden');
+    //   }
+    //   renderPrayers();
+    // });
 
-    clearSearchBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      searchQuery = '';
-      clearSearchBtn.classList.add('hidden');
-      renderPrayers();
-    });
+    // clearSearchBtn.addEventListener('click', () => {
+    //   searchInput.value = '';
+    //   searchQuery = '';
+    //   clearSearchBtn.classList.add('hidden');
+    //   renderPrayers();
+    // });
 
     // Control de Tamaño de Letra
     btnFontUp.addEventListener('click', () => {
