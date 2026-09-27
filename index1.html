@@ -361,6 +361,9 @@ Dios te salve María, llena eres de gracia, el Señor es contigo, bendita tú er
 
 Santa María, madre de Dios, ruega por nosotros pecadores, ahora y en la hora de nuestra muerte. AMÉN
 
+o   o   o   o   o
+o   o   o   o   o
+
 UN GLORIA
 Glora al Padre y al Hijo y al Espíritu Santo
 Como era en un principio, ahora y siempre por los siglos de los siglos. AMÉN
@@ -481,7 +484,7 @@ Ruega por nosotros, Santa madre de Dios, para que seamos dignos de alcanzar las 
 vengo a pedirte paz, sabiduría y fuerza.
 
 Hoy quiero mirar al mundo con ojos llenos de amor.
-Ser paciente, comprensivo, humilde, suave e bueno.
+Ser paciente, comprensivo, humilde, suave y bueno.
 
 Ver a tus hijos detrás de las apariencias,
 como los ves tú mismo,
@@ -489,7 +492,7 @@ para así poder apreciar la bondad de cada uno.
 
 Cierra mis oídos a toda murmuración.
 Guarda mi lengua de toda maledicencia.
-Que sólo los pensamientos que bendigan permanecican en mí. Amén.`
+Que sólo los pensamientos que bendigan permanezcan en mí. Amén.`
       }
     ];
 
@@ -514,67 +517,6 @@ Que sólo los pensamientos que bendigan permanecican en mí. Amén.`
     // Inicialización del tema
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.documentElement.classList.add('dark');
-    }
-
-    // Función auxiliar para formatear las oraciones e inyectar la grilla de Avemarías
-    function formatPrayerContent(prayer) {
-      if (prayer.id !== 'santo-rosario') {
-        return escapeHtml(prayer.content);
-      }
-
-      // Dividimos el texto en bloques usando "DIEZ AVEMARÍA" como separador
-      const parts = prayer.content.split('DIEZ AVEMARÍA');
-      let resultHTML = '';
-
-      parts.forEach((part, index) => {
-        resultHTML += escapeHtml(part);
-
-        // Inyectar la grilla interactiva en cada una de las 5 decenas
-        if (index < parts.length - 1) {
-          resultHTML += `
-          <div class="my-4 p-3 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-700/50 select-none">
-            <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider text-center">
-              Cuentas de Avemaría (Misterio ${index + 1})
-            </div>
-            <div class="grid grid-cols-5 gap-3 max-w-[240px] mx-auto py-1">
-          `;
-
-          for (let i = 1; i <= 10; i++) {
-            resultHTML += `
-              <button 
-                type="button"
-                onclick="toggleBead(this)" 
-                class="w-9 h-9 rounded-full border-2 border-amber-500/80 text-amber-600 dark:text-amber-400 font-bold text-xs flex items-center justify-center transition-all transform active:scale-90 shadow-xs hover:border-amber-500"
-                title="Cuenta ${i}"
-              >
-                ${i}
-              </button>
-            `;
-          }
-
-          resultHTML += `
-            </div>
-          </div>
-          `;
-        }
-      });
-
-      return resultHTML;
-    }
-
-    // Función para alternar el color de las cuentas al tocarlas
-    window.toggleBead = function(btn) {
-      const isMarked = btn.classList.contains('bg-amber-500');
-
-      if (isMarked) {
-        // Desmarcar: volver a estilo bordeado
-        btn.classList.remove('bg-amber-500', 'text-white', 'border-amber-500', 'shadow-amber-500/30');
-        btn.classList.add('text-amber-600', 'dark:text-amber-400', 'border-amber-500/80');
-      } else {
-        // Marcar: fondo dorado relleno y texto blanco
-        btn.classList.remove('text-amber-600', 'dark:text-amber-400', 'border-amber-500/80');
-        btn.classList.add('bg-amber-500', 'text-white', 'border-amber-500', 'shadow-amber-500/30');
-      }
     }
 
     // Renderizar lista de oraciones
@@ -613,7 +555,7 @@ Que sólo los pensamientos que bendigan permanecican en mí. Amén.`
           
           <div class="${isOpen ? 'block' : 'hidden'} px-5 pb-5 pt-2 border-t border-slate-100 dark:border-slate-700/40">
             <div class="prayer-text text-slate-600 dark:text-slate-300 font-serif" style="font-size: ${fontScale}%">
-              ${formatPrayerContent(prayer)}
+              ${escapeHtml(prayer.content)}
             </div>
             <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/30 flex justify-end">
               <button 
